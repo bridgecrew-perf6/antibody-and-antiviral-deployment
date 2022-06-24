@@ -34,6 +34,12 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/data/input_sgtf.csv.gz
+        
+  extract_sgtf_weekly_data:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_sgtf_weekly --index-date-range "2020-03-01 to 2022-05-30 by week" --output-dir=output/data --output-format=csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/data/input_sgtf_weekly_*.csv.gz
   
   # Data processing ----
   data_process:
@@ -42,6 +48,13 @@ actions:
     outputs:
       highly_sensitive:
         data: output/data/data_processed*.rds
+        
+  data_process_sgtf:
+    run: r:latest analysis/process/process_data_sgtf.R
+    needs: [extract_sgtf_weekly_data]
+    outputs:
+      highly_sensitive:
+        data: output/data/weekly_sgtf_counts*.rds
   
   # Data summaries ----
   data_properties:
@@ -96,7 +109,7 @@ actions:
   
   sgtf_report:
     run: r:latest -e 'rmarkdown::render("analysis/descriptive/sgtf_report.Rmd", knit_root_dir = "/workspace", output_dir="/workspace/output/coverage")'
-    needs: [extract_sgtf_data]
+    needs: [extract_sgtf_data, data_process_sgtf]
     outputs:
       moderately_sensitive:
         html: output/coverage/sgtf_report.html

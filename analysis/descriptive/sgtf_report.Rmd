@@ -33,18 +33,20 @@ knitr::opts_chunk$set(echo = TRUE)
 # Preliminaries ----
 
 ## Import libraries
-library('tidyverse')
-library('gt')
-library('gtsummary')
-library('here')
-library('tidyverse')
-library('lubridate')
-library('arrow')
-library('reshape2')
-library('dplyr')
-library('readr')
-library('survival')
-library('survminer')
+library(tidyverse)
+library(here)
+library(glue)
+library(gt)
+library(gtsummary)
+library(reshape2)
+library(stringr)
+library(scales)
+library(kableExtra)
+library(knitr)
+library(ggplot2)
+library(png)
+library(readr)
+library(htmltools)
 
 ## Custom functions
 source(here("analysis", "lib", "custom_functions.R"))
@@ -337,5 +339,116 @@ tbls <- list(data_sgtf %>%
   tbl_summary())
 
 tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+
+```
+
+
+## Trends in S gene target failure
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 2 Number of COVID-19 cases with S gene positive/SGTF among those tested by week as of 6 June 2022, overall (a) and by region (b).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE}
+
+# SGTF plot
+weekly_sgtf_counts <- read_rds(here::here("output", "data", "weekly_sgtf_counts.rds"))
+
+weekly_sgtf_counts %>%
+  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
+  geom_bar(stat='identity') +
+  theme_bw() +
+  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Count", title = "(a)") +
+  theme(
+    legend.position = "bottom", 
+    legend.title = element_blank(),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank()) + 
+  scale_y_continuous(labels = comma) +
+  scale_fill_brewer(palette="Pastel1")
+
+# SGTF plot by region
+weekly_sgtf_counts_by_region <- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds"))
+
+weekly_sgtf_counts_by_region %>%
+  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
+  geom_bar(stat='identity') +
+  theme_bw() +
+  facet_wrap(~region_nhs) +
+  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Count", title = "(b)") +
+  theme(
+    legend.position = "bottom", 
+    legend.title = element_blank(),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank()) + 
+  scale_y_continuous(labels = comma) +
+  scale_fill_brewer(palette="Pastel1")
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 3 Weekly number (bars) and proportion (line) of COVID-19 cases with SGTF among those tested and with S gene detection results (1 March 2020 to 6 June 2022).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE}
+
+# SGTF plot
+weekly_sgtf_counts_perc <- weekly_sgtf_counts %>%
+  filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
+  group_by(week) %>%
+  mutate(total = sum(count_redacted, na.rm = T),
+         perc = count_redacted/total*100)
+
+tot_obs <- max(weekly_sgtf_counts_perc$total, na.rm = T)
+
+weekly_sgtf_counts_perc %>%
+  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
+  geom_bar(stat='identity') +
+  geom_line(data = (weekly_sgtf_counts_perc %>% filter(sgtf_alltests == "Cases with SGTF")), aes(y = perc), color = "red") +
+  scale_y_continuous(labels = comma,
+                     sec.axis = sec_axis(trans = ~./tot_obs, labels = percent, 
+                                           name = "Percent")) +
+  theme_bw() +
+  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Count", title = "(a)") +
+  theme(
+    legend.position = "bottom", 
+    legend.title = element_blank(),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank()) + 
+  scale_fill_brewer(palette = "Blues")
+
+# SGTF plot by region
+weekly_sgtf_counts_by_region_perc <- weekly_sgtf_counts_by_region %>%
+  filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
+  group_by(week, region_nhs) %>%
+  mutate(total = sum(count_redacted, na.rm = T),
+         perc = count_redacted/total*100)
+
+tot_obs <- max(weekly_sgtf_counts_by_region_perc$total, na.rm = T)
+
+weekly_sgtf_counts_by_region_perc %>%
+  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
+  geom_bar(stat='identity') +
+  geom_line(data = (weekly_sgtf_counts_by_region_perc %>% filter(sgtf_alltests == "Cases with SGTF")), aes(y = perc), color = "red") +
+  facet_wrap(~region_nhs) +
+  scale_y_continuous(labels = comma,
+                     sec.axis = sec_axis(trans = ~./tot_obs, labels = percent, 
+                                           name = "Percent")) +
+  theme_bw() +
+  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Count", title = "(b)") +
+  theme(
+    legend.position = "bottom", 
+    legend.title = element_blank(),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank()) + 
+  scale_fill_brewer(palette = "Blues")
+
 
 ```

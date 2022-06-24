@@ -553,3 +553,87 @@ tidy_wald <- function(x, conf.int = TRUE, conf.level = .95, exponentiate = TRUE,
   ret
 }
 
+## Weekly sgtf counts
+calculate_weekly_counts <- function(x) {
+  
+  # Read in data
+  data_extract <- read_csv(
+    here::here("output", "data", x),
+    col_types = cols_only(                      
+      
+      # PATIENT ID ----
+      patient_id = col_integer(),
+      
+      # S-GENE TARGET FAILURE Target
+      sgtf_alltests = col_character(),
+      
+      # CLINICAL/DEMOGRAPHIC COVARIATES ----
+      age = col_integer(),
+      sex = col_character(),
+      region_nhs = col_character()
+      
+    ))
+  
+  # Calculate counts and proportions
+  weekly_count <- data_extract %>%
+    mutate(sgtf_alltests = fct_case_when(
+      sgtf_alltests == "1" ~ "Cases with SGTF",
+      sgtf_alltests == "0" ~ "Detectable S-gene",
+      sgtf_alltests == "8" ~ "Classified as 8",
+      sgtf_alltests == "9" ~ "Unclassifiable",
+      TRUE ~ "Not avaliable")) %>%
+    group_by(sgtf_alltests) %>%
+    summarise(count = n()) %>%
+    ungroup() %>%
+    mutate(week = as.Date(substr(x, 19,28)),
+           count = ifelse(count < threshold, NA, count),
+           count_redacted =  plyr::round_any(count, 10)) %>%
+    select(week, sgtf_alltests, count_redacted)
+  
+  # Output
+  weekly_count
+  
+}
+
+calculate_weekly_counts_by_region <- function(x) {
+  
+  # Read in data
+  data_extract <- read_csv(
+    here::here("output", "data", x),
+    col_types = cols_only(                      
+      
+      # PATIENT ID ----
+      patient_id = col_integer(),
+      
+      # S-GENE TARGET FAILURE Target
+      sgtf_alltests = col_character(),
+      
+      # CLINICAL/DEMOGRAPHIC COVARIATES ----
+      age = col_integer(),
+      sex = col_character(),
+      region_nhs = col_character()
+      
+    ))
+  
+  # Calculate counts and proportions
+  weekly_count_by_region <- data_extract %>%
+    mutate(sgtf_alltests = fct_case_when(
+      sgtf_alltests == "1" ~ "Cases with SGTF",
+      sgtf_alltests == "0" ~ "Detectable S-gene",
+      sgtf_alltests == "8" ~ "Classified as 8",
+      sgtf_alltests == "9" ~ "Unclassifiable",
+      TRUE ~ "Not avaliable")) %>%
+    group_by(sgtf_alltests, region_nhs) %>%
+    summarise(count = n()) %>%
+    ungroup() %>%
+    mutate(week = as.Date(substr(x, 19,28)),
+           count = ifelse(count < threshold, NA, count),
+           count_redacted =  plyr::round_any(count, 10)) %>%
+    select(week, region_nhs, sgtf_alltests, count_redacted)
+  
+  # Output
+  weekly_count_by_region
+  
+}
+
+

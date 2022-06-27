@@ -52,7 +52,7 @@ study = StudyDefinition(
   population = patients.satisfying(
     
     """
-    sgtf_alltests
+    sgtf_alltests != ""
     """,
     
   ),

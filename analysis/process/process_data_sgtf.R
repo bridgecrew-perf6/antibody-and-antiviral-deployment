@@ -44,9 +44,18 @@ weekly_sgtf_counts = lapply(input.files, FUN = calculate_weekly_counts) %>%
 weekly_sgtf_counts_by_region = lapply(input.files, FUN = calculate_weekly_counts_by_region) %>% 
   bind_rows()
 
+weekly_sgtf_counts_age_sex = lapply(input.files, FUN = calculate_table) %>% 
+  bind_rows() %>%
+  group_by(sgtf_alltests, ageband, sex) %>%
+  summarise(count = sum(count, na.rm = T)) %>%
+  mutate(count = as.numeric(ifelse(count < threshold, NA, count)),
+         count_redacted =  plyr::round_any(count, 10)) %>%
+  select(sgtf_alltests,  ageband, sex, count_redacted)
+
 ## Save dataset(s) ----
 write_rds(weekly_sgtf_counts, here::here("output", "data", "weekly_sgtf_counts.rds"))
 write_rds(weekly_sgtf_counts_by_region, here::here("output", "data", "weekly_sgtf_counts_by_region.rds"))
+write_rds(weekly_sgtf_counts_age_sex, here::here("output", "data", "weekly_sgtf_counts_by_age_sex.rds"))
 
 
 

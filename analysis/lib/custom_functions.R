@@ -636,4 +636,55 @@ calculate_weekly_counts_by_region <- function(x) {
   
 }
 
+# Function to calculate counts by age and sex
+calculate_table <- function(x) {
+  
+  # Read in data
+  data_extract <- read_csv(
+    here::here("output", "data", x),
+    col_types = cols_only(                      
+      
+      # PATIENT ID ----
+      patient_id = col_integer(),
+      
+      # S-GENE TARGET FAILURE Target
+      sgtf_alltests = col_character(),
+      
+      # CLINICAL/DEMOGRAPHIC COVARIATES ----
+      age = col_integer(),
+      sex = col_character(),
+      region_nhs = col_character()
+      
+    ))
+  
+  # Calculate counts and proportions
+  weekly_count <- data_extract %>%
+    mutate(
+      
+      sgtf_alltests = fct_case_when(
+      sgtf_alltests == "1" ~ "Cases with SGTF",
+      sgtf_alltests == "0" ~ "Detectable S-gene",
+      sgtf_alltests == "8" ~ "Classified as 8",
+      sgtf_alltests == "9" ~ "Unclassifiable",
+      TRUE ~ "Not avaliable"),
+      
+      ageband = cut(
+        age,
+        breaks = c(10, 16, 24, 59, 74, 75, Inf),
+        labels = c("<=10", "11-16", "17-24", "25-59", "60-74", "75+"),
+        right = TRUE
+      )
+      
+      ) %>%
+    group_by(sgtf_alltests, ageband, sex) %>%
+    summarise(count = n()) %>%
+    ungroup() %>%
+    mutate(week = as.Date(substr(x, 19,28))) %>%
+    select(week, sgtf_alltests, ageband, sex, count)
+  
+  # Output
+  weekly_count
+  
+}
+
 

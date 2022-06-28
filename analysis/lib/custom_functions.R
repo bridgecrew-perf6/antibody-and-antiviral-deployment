@@ -586,7 +586,7 @@ calculate_weekly_counts <- function(x) {
     summarise(count = n()) %>%
     ungroup() %>%
     mutate(week = as.Date(substr(x, 19,28)),
-           count = ifelse(count < threshold, NA, count),
+           count = as.numeric(ifelse(count < threshold, NA, count)),
            count_redacted =  plyr::round_any(count, 10)) %>%
     select(week, sgtf_alltests, count_redacted)
   
@@ -627,7 +627,7 @@ calculate_weekly_counts_by_region <- function(x) {
     summarise(count = n()) %>%
     ungroup() %>%
     mutate(week = as.Date(substr(x, 19,28)),
-           count = ifelse(count < threshold, NA, count),
+           count = as.numeric(ifelse(count < threshold, NA, count)),
            count_redacted =  plyr::round_any(count, 10)) %>%
     select(week, region_nhs, sgtf_alltests, count_redacted)
   

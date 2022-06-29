@@ -413,7 +413,7 @@ Between **`r format(start, format = "%d-%b-%Y")`** and **`r format(end, format =
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
  data_extract <- read_csv(
-    here::here("output", "data", input.files[1]))
+    here::here("output", "data", "input_sgtf_weekly_2020-03-01.csv.gz"))
     
 table(data_extract$sgtf_alltests)
 

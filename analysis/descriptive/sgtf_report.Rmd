@@ -227,7 +227,10 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+print(tbls1$table_body$stat_0)
+print(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+"))
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
   str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
 
 

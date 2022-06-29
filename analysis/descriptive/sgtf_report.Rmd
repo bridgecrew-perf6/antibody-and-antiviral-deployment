@@ -202,6 +202,7 @@ data_sgtf %>%
   ggplot(aes(x = tests_conducted_positive_alltests, y = n_pos_tests)) +
   geom_col() +
   theme_bw() +
+  scale_y_continuous(labels = comma) +
   labs(x = "Number of positive SARS-CoV-2 test results", y = "Frequency")
 
 ```
@@ -216,7 +217,7 @@ data_sgtf %>%
 colSums(!is.na(data_sgtf[,c("sgtf_first_earliestspecimen", "sgtf_first_alltests")]))
 
 ## Values
-tbls <- list(data_sgtf %>%
+tbls1 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_earliestspecimen) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -224,8 +225,13 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary(),
-  data_sgtf %>%
+  tbl_summary()
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+
+
+tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_alltests) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -233,9 +239,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary())
-  
-tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+  tbl_summary()
+
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+
+tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 ```
 
 ### SGTF on first positive test date
@@ -244,7 +253,7 @@ tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Da
 # Counts
 colSums(!is.na(data_sgtf[,c("sgtf_first_covid_test_date_earliestspecimen", "sgtf_first_covid_test_date_alltests")]))
 
-tbls <- list(data_sgtf %>%
+tbls1 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_covid_test_date_earliestspecimen,) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -252,8 +261,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary(),
-  data_sgtf %>%
+  tbl_summary()
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+
+tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_covid_test_date_alltests,) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -261,12 +274,15 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary())
+  tbl_summary()
+
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
   
-tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
 ## Restricted to those with same positive test date
-tbls <- list(data_sgtf %>%
+tbls1 <- data_sgtf %>%
   filter(covid_first_test_positive_date_earliestspecimen == covid_first_test_positive_date_alltests) %>%
   select(`S-gene target failure` = sgtf_first_covid_test_date_earliestspecimen,) %>%
   mutate(`S-gene target failure` = fct_case_when(
@@ -275,8 +291,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary(),
-  data_sgtf %>%
+  tbl_summary()
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+
+tbls2 <- data_sgtf %>%
   filter(covid_first_test_positive_date_earliestspecimen == covid_first_test_positive_date_alltests) %>%
   select(`S-gene target failure` = sgtf_first_covid_test_date_alltests,) %>%
   mutate(`S-gene target failure` = fct_case_when(
@@ -285,9 +305,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary())
+  tbl_summary()
 
-tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+
+tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
 ```
 
@@ -297,7 +320,7 @@ tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Da
 # Counts
 colSums(!is.na(data_sgtf[,c("sgtf_latest_covid_test_date_earliestspecimen", "sgtf_latest_covid_test_date_alltests")]))
 
-tbls <- list(data_sgtf %>%
+tbls1 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_latest_covid_test_date_earliestspecimen,) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -305,8 +328,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary(),
-  data_sgtf %>%
+  tbl_summary()
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+
+tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_latest_covid_test_date_alltests,) %>%
   mutate(`S-gene target failure` = fct_case_when(
            `S-gene target failure` == "1" ~ "Cases with SGTF",
@@ -314,12 +341,15 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary())
-  
-tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+  tbl_summary()
+
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+
+tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
 ## Restricted to those with same positive test date
-tbls <- list(data_sgtf %>%
+tbls1 <- data_sgtf %>%
   filter(covid_latest_test_positive_date_earliestspecimen == covid_latest_test_positive_date_alltests) %>%
   select(`S-gene target failure` = sgtf_latest_covid_test_date_earliestspecimen,) %>%
   mutate(`S-gene target failure` = fct_case_when(
@@ -328,8 +358,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary(),
-  data_sgtf %>%
+  tbl_summary()
+
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+
+tabls2 <- data_sgtf %>%
   filter(covid_latest_test_positive_date_earliestspecimen == covid_latest_test_positive_date_alltests) %>%
   select(`S-gene target failure` = sgtf_latest_covid_test_date_alltests,) %>%
   mutate(`S-gene target failure` = fct_case_when(
@@ -338,9 +372,12 @@ tbls <- list(data_sgtf %>%
            `S-gene target failure` == "8" ~ "Classified as 8",
            `S-gene target failure` == "9" ~ "Unclassifiable",
            TRUE ~ "Not avaliable")) %>%
-  tbl_summary())
+  tbl_summary()
 
-tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+
+tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
 ```
 
@@ -399,7 +436,7 @@ clearly this is a PCR only variable.
 <br>
 
 #### Results
-Between 1st March 2020 and 4th June 2022, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available;
+Between 1st March 2020 and 4th June 2022, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available (note, in the All Tests dataset, we are not able to distinguish whether a positive test was done using a PCR or LFT, therefore coverage will be lower than expected due to the dilution of the percentage of LFT tests included);
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -413,52 +450,52 @@ Between 1st March 2020 and 4th June 2022, of all (first weekly) positive SARS-Co
 
 During this period, the weekly proportion of specimens tested has fluctuated between approximately `r min_weekly_prop`% and `r max_weekly_prop`%, with coverage varying by region (Figure 1). Figure 2 shows how the number of cases with SGTF has fluctuated over time and Figure 3 shows proportion of COVID-19 cases with SGTF among those with S gene detection results. Cases by age and sex are displayed (Table 1). Note, trends in SGTF over space and time are affected by the coverage of laboratories contributing to this surveillance data.
 
-<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', out.width = '50%', fig.show='hold' , fig.cap = "**Figure 1 Proportion of specimens tested by A) week and B) region.**", fig.topcaption=TRUE} -->
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', out.width = '50%', fig.show='hold' , fig.cap = "**Figure 1 Proportion of specimens tested by A) week and B) region.**", fig.topcaption=TRUE}
 
-<!-- # SGTF plot -->
-<!-- read_rds(here::here("output", "data", "weekly_sgtf_counts.rds")) %>% -->
-<!--   group_by(week) %>% -->
-<!--   mutate(total = sum(count_redacted, na.rm = T)) %>% -->
-<!--   ungroup() %>% -->
-<!--   mutate(perc = round(count_redacted/total*100, digits = 0)) %>% -->
-<!--   filter(sgtf_alltests == "Not avaliable") %>% -->
-<!--   mutate(perc_tested = 100 - perc) %>% -->
-<!--   ggplot(aes(x = week, y = perc_tested)) + -->
-<!--   geom_line(colour = "blue") + -->
-<!--   theme_bw() + -->
-<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
-<!--   labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(a)") + -->
-<!--   theme( -->
-<!--     axis.text = element_text(size = 10), -->
-<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
-<!--     axis.title = element_text(size = 10), -->
-<!--     axis.line.x = element_line(colour = "black"), -->
-<!--     panel.grid.minor.x = element_blank()) -->
+# SGTF plot
+read_rds(here::here("output", "data", "weekly_sgtf_counts.rds")) %>%
+  group_by(week) %>%
+  mutate(total = sum(count_redacted, na.rm = T)) %>%
+  ungroup() %>%
+  mutate(perc = round(count_redacted/total*100, digits = 0)) %>%
+  filter(sgtf_alltests == "Not avaliable") %>%
+  mutate(perc_tested = 100 - perc) %>%
+  ggplot(aes(x = week, y = perc_tested)) +
+  geom_line(colour = "blue") +
+  theme_bw() +
+  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(a)") +
+  theme(
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank())
 
-<!-- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds")) %>% -->
-<!--   filter(!is.na(region_nhs)) %>% -->
-<!--   group_by(week, region_nhs) %>% -->
-<!--   mutate(total = sum(count_redacted, na.rm = T)) %>% -->
-<!--   ungroup() %>% -->
-<!--   mutate(perc = round(count_redacted/total*100, digits = 0)) %>% -->
-<!--   filter(sgtf_alltests == "Not avaliable") %>% -->
-<!--   mutate(perc_tested = 100 - perc) %>% -->
-<!--   ggplot(aes(x = week, y = perc_tested, colour = region_nhs)) + -->
-<!--   geom_line() + -->
-<!--   facet_wrap(~region_nhs) + -->
-<!--   theme_bw() + -->
-<!--   scale_x_date(date_breaks = "3 month", date_labels =  "%d %b %Y") + -->
-<!--   labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(b)")+ -->
-<!--   theme( -->
-<!--     legend.position = "bottom",  -->
-<!--     legend.title = element_blank(), -->
-<!--     axis.text = element_text(size = 10), -->
-<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
-<!--     axis.title = element_text(size = 10), -->
-<!--     axis.line.x = element_line(colour = "black"), -->
-<!--     panel.grid.minor.x = element_blank()) -->
+read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds")) %>%
+  filter(!is.na(region_nhs)) %>%
+  group_by(week, region_nhs) %>%
+  mutate(total = sum(count_redacted, na.rm = T)) %>%
+  ungroup() %>%
+  mutate(perc = round(count_redacted/total*100, digits = 0)) %>%
+  filter(sgtf_alltests == "Not avaliable") %>%
+  mutate(perc_tested = 100 - perc) %>%
+  ggplot(aes(x = week, y = perc_tested, colour = region_nhs)) +
+  geom_line() +
+  facet_wrap(~region_nhs) +
+  theme_bw() +
+  scale_x_date(date_breaks = "3 month", date_labels =  "%d %b %Y") +
+  labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(b)")+
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    axis.title = element_text(size = 10),
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank())
 
-<!-- ``` -->
+```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 2 Number of COVID-19 cases with S gene positive/SGTF among those tested by week as of 6 June 2022, overall (a) and by region (b).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE}
 

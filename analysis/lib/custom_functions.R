@@ -568,6 +568,7 @@ calculate_weekly_sgtf_counts <- function(x) {
       sgtf_alltests = col_character(),
       
       # CLINICAL/DEMOGRAPHIC COVARIATES ----
+      tests_conducted_positive = col_integer(),
       age = col_integer(),
       sex = col_character(),
       region_nhs = col_character()
@@ -576,15 +577,16 @@ calculate_weekly_sgtf_counts <- function(x) {
   
   # Calculate counts and proportions
   weekly_count <- data_extract %>%
+    filter(!is.na(sgtf_alltests)) %>%
     mutate(sgtf_alltests = fct_case_when(
       sgtf_alltests == "1" ~ "Cases with SGTF",
       sgtf_alltests == "0" ~ "Detectable S-gene",
       sgtf_alltests == "8" ~ "Classified as 8",
-      sgtf_alltests == "9" ~ "Unclassifiable",
-      is.na(sgtf_alltests) ~ "Not avaliable")) %>%
+      sgtf_alltests == "9" ~ "Unclassifiable")) %>%
     group_by(sgtf_alltests) %>%
     summarise(count = n()) %>%
     ungroup() %>%
+    add_row(sgtf_alltests = "Not avaliable", count = sum(data_extract$tests_conducted_positive, na.rm = T)) %>%
     mutate(week = as.Date(substr(x, 19,28)),
            count = as.numeric(ifelse(count < threshold, NA, count)),
            count_redacted =  plyr::round_any(count, 10)) %>%
@@ -609,6 +611,7 @@ calculate_weekly_counts_by_region <- function(x) {
       sgtf_alltests = col_character(),
       
       # CLINICAL/DEMOGRAPHIC COVARIATES ----
+      tests_conducted_positive = col_integer(),
       age = col_integer(),
       sex = col_character(),
       region_nhs = col_character()
@@ -617,15 +620,16 @@ calculate_weekly_counts_by_region <- function(x) {
   
   # Calculate counts and proportions
   weekly_count_by_region <- data_extract %>%
+    filter(!is.na(sgtf_alltests)) %>%
     mutate(sgtf_alltests = fct_case_when(
       sgtf_alltests == "1" ~ "Cases with SGTF",
       sgtf_alltests == "0" ~ "Detectable S-gene",
       sgtf_alltests == "8" ~ "Classified as 8",
-      sgtf_alltests == "9" ~ "Unclassifiable",
-      is.na(sgtf_alltests) ~ "Not avaliable")) %>%
+      sgtf_alltests == "9" ~ "Unclassifiable")) %>%
     group_by(sgtf_alltests, region_nhs) %>%
     summarise(count = n()) %>%
     ungroup() %>%
+    add_row(sgtf_alltests = "Not avaliable", count = sum(data_extract$tests_conducted_positive, na.rm = T)) %>%
     mutate(week = as.Date(substr(x, 19,28)),
            count = as.numeric(ifelse(count < threshold, NA, count)),
            count_redacted =  plyr::round_any(count, 10)) %>%
@@ -686,5 +690,3 @@ calculate_table <- function(x) {
   weekly_count
   
 }
-
-

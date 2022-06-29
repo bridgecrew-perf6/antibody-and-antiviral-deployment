@@ -418,226 +418,226 @@ Between **`r format(start, format = "%d-%b-%Y")`** and **`r format(end, format =
 
 ```
 
-During this period, the weekly proportion of specimens tested has fluctuated between approximately `r min_weekly_prop`% and `r max_weekly_prop`%, with coverage varying by region (Figure 1). Figure 2 shows how the number of cases with SGTF has fluctuated over time and Figure 3 shows proportion of COVID-19 cases with SGTF among those with S gene detection results. Cases by age and sex are displayed (Table 1). Note, trends in SGTF over space and time are affected by the coverage of laboratories contributing to this surveillance data.
+<!-- During this period, the weekly proportion of specimens tested has fluctuated between approximately `r min_weekly_prop`% and `r max_weekly_prop`%, with coverage varying by region (Figure 1). Figure 2 shows how the number of cases with SGTF has fluctuated over time and Figure 3 shows proportion of COVID-19 cases with SGTF among those with S gene detection results. Cases by age and sex are displayed (Table 1). Note, trends in SGTF over space and time are affected by the coverage of laboratories contributing to this surveillance data. -->
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', out.width = '50%', fig.show='hold' , fig.cap = "**Figure 1 Proportion of specimens tested by A) week and B) region.**", fig.topcaption=TRUE}
+<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', out.width = '50%', fig.show='hold' , fig.cap = "**Figure 1 Proportion of specimens tested by A) week and B) region.**", fig.topcaption=TRUE} -->
 
-# SGTF plot
-read_rds(here::here("output", "data", "weekly_sgtf_counts.rds")) %>%
-  group_by(week) %>%
-  mutate(total = sum(count_redacted, na.rm = T)) %>%
-  ungroup() %>%
-  mutate(perc = round(count_redacted/total*100, digits = 0)) %>%
-  filter(sgtf_alltests == "Not avaliable") %>%
-  mutate(perc_tested = 100 - perc) %>%
-  ggplot(aes(x = week, y = perc_tested)) +
-  geom_line(colour = "blue") +
-  theme_bw() +
-  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(a)") +
-  theme(
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank())
+<!-- # SGTF plot -->
+<!-- read_rds(here::here("output", "data", "weekly_sgtf_counts.rds")) %>% -->
+<!--   group_by(week) %>% -->
+<!--   mutate(total = sum(count_redacted, na.rm = T)) %>% -->
+<!--   ungroup() %>% -->
+<!--   mutate(perc = round(count_redacted/total*100, digits = 0)) %>% -->
+<!--   filter(sgtf_alltests == "Not avaliable") %>% -->
+<!--   mutate(perc_tested = 100 - perc) %>% -->
+<!--   ggplot(aes(x = week, y = perc_tested)) + -->
+<!--   geom_line(colour = "blue") + -->
+<!--   theme_bw() + -->
+<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(a)") + -->
+<!--   theme( -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) -->
 
-read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds")) %>%
-  filter(!is.na(region_nhs)) %>%
-  group_by(week, region_nhs) %>%
-  mutate(total = sum(count_redacted, na.rm = T)) %>%
-  ungroup() %>%
-  mutate(perc = round(count_redacted/total*100, digits = 0)) %>%
-  filter(sgtf_alltests == "Not avaliable") %>%
-  mutate(perc_tested = 100 - perc) %>%
-  ggplot(aes(x = week, y = perc_tested, colour = region_nhs)) +
-  geom_line() +
-  facet_wrap(~region_nhs) +
-  theme_bw() +
-  scale_x_date(date_breaks = "3 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(b)")+
-  theme(
-    legend.position = "bottom", 
-    legend.title = element_blank(),
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank())
+<!-- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds")) %>% -->
+<!--   filter(!is.na(region_nhs)) %>% -->
+<!--   group_by(week, region_nhs) %>% -->
+<!--   mutate(total = sum(count_redacted, na.rm = T)) %>% -->
+<!--   ungroup() %>% -->
+<!--   mutate(perc = round(count_redacted/total*100, digits = 0)) %>% -->
+<!--   filter(sgtf_alltests == "Not avaliable") %>% -->
+<!--   mutate(perc_tested = 100 - perc) %>% -->
+<!--   ggplot(aes(x = week, y = perc_tested, colour = region_nhs)) + -->
+<!--   geom_line() + -->
+<!--   facet_wrap(~region_nhs) + -->
+<!--   theme_bw() + -->
+<!--   scale_x_date(date_breaks = "3 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Percentage of specimens tested", title = "(b)")+ -->
+<!--   theme( -->
+<!--     legend.position = "bottom",  -->
+<!--     legend.title = element_blank(), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) -->
 
-```
+<!-- ``` -->
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 2 Number of COVID-19 cases with S gene positive/SGTF among those tested by week as of 6 June 2022, overall (a) and by region (b).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE}
+<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 2 Number of COVID-19 cases with S gene positive/SGTF among those tested by week as of 6 June 2022, overall (a) and by region (b).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE} -->
 
-# SGTF plot
-weekly_sgtf_counts <- read_rds(here::here("output", "data", "weekly_sgtf_counts.rds"))
+<!-- # SGTF plot -->
+<!-- weekly_sgtf_counts <- read_rds(here::here("output", "data", "weekly_sgtf_counts.rds")) -->
 
-weekly_sgtf_counts %>%
-  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
-  geom_bar(stat='identity') +
-  theme_bw() +
-  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Count", title = "(a)") +
-  theme(
-    legend.position = "bottom", 
-    legend.title = element_blank(),
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank()) + 
-  scale_y_continuous(labels = comma) +
-  scale_fill_brewer(palette="Pastel1")
+<!-- weekly_sgtf_counts %>% -->
+<!--   ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) + -->
+<!--   geom_bar(stat='identity') + -->
+<!--   theme_bw() + -->
+<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Count", title = "(a)") + -->
+<!--   theme( -->
+<!--     legend.position = "bottom",  -->
+<!--     legend.title = element_blank(), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) +  -->
+<!--   scale_y_continuous(labels = comma) + -->
+<!--   scale_fill_brewer(palette="Pastel1") -->
 
-# SGTF plot by region
-weekly_sgtf_counts_by_region <- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds"))
+<!-- # SGTF plot by region -->
+<!-- weekly_sgtf_counts_by_region <- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_region.rds")) -->
 
-weekly_sgtf_counts_by_region %>%
-  filter(!is.na(region_nhs)) %>%
-  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
-  geom_bar(stat='identity') +
-  theme_bw() +
-  facet_wrap(~region_nhs, ncol = 3) +
-  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Count", title = "(b)") +
-  theme(
-    legend.position = "bottom", 
-    legend.title = element_blank(),
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank()) + 
-  scale_y_continuous(labels = comma) +
-  scale_fill_brewer(palette="Pastel1")
+<!-- weekly_sgtf_counts_by_region %>% -->
+<!--   filter(!is.na(region_nhs)) %>% -->
+<!--   ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) + -->
+<!--   geom_bar(stat='identity') + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~region_nhs, ncol = 3) + -->
+<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Count", title = "(b)") + -->
+<!--   theme( -->
+<!--     legend.position = "bottom",  -->
+<!--     legend.title = element_blank(), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) +  -->
+<!--   scale_y_continuous(labels = comma) + -->
+<!--   scale_fill_brewer(palette="Pastel1") -->
 
-```
+<!-- ``` -->
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 3 Weekly number (bars) and proportion (line) of COVID-19 cases with SGTF among those tested and with S gene detection results (1 March 2020 to 6 June 2022).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE}
+<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%', fig.show='hold' , fig.cap = "**Figure 3 Weekly number (bars) and proportion (line) of COVID-19 cases with SGTF among those tested and with S gene detection results (1 March 2020 to 6 June 2022).** Note, this is only available for the positive tests in the _All Tests Dataset_ and no attempts have been made to define epidsodes therefore it is posible that individuals have multiple test results for the same infection and here we are only capturing the result for the first record that appears in that week.", fig.topcaption=TRUE} -->
 
-# SGTF plot
-weekly_sgtf_counts_perc <- weekly_sgtf_counts %>%
-  filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
-  group_by(week) %>%
-  mutate(total = sum(count_redacted, na.rm = T),
-         perc = count_redacted/total)
+<!-- # SGTF plot -->
+<!-- weekly_sgtf_counts_perc <- weekly_sgtf_counts %>% -->
+<!--   filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>% -->
+<!--   group_by(week) %>% -->
+<!--   mutate(total = sum(count_redacted, na.rm = T), -->
+<!--          perc = count_redacted/total) -->
 
-tot_obs <- max(weekly_sgtf_counts_perc$total, na.rm = T)
+<!-- tot_obs <- max(weekly_sgtf_counts_perc$total, na.rm = T) -->
 
-weekly_sgtf_counts_perc %>%
-  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
-  geom_bar(stat='identity') +
-  geom_line(data = (weekly_sgtf_counts_perc %>% filter(sgtf_alltests == "Cases with SGTF")), mapping = aes(y = perc*tot_obs), color = "red") +
-  scale_y_continuous(labels = comma,
-                     sec.axis = sec_axis( ~./tot_obs, 
-                                          labels = percent, 
-                                          name = "Percent")) +
-  theme_bw() +
-  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Count", title = "(a)") +
-  theme(
-    legend.position = "bottom", 
-    legend.title = element_blank(),
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank()) + 
-  scale_fill_brewer(palette = "Blues")
+<!-- weekly_sgtf_counts_perc %>% -->
+<!--   ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) + -->
+<!--   geom_bar(stat='identity') + -->
+<!--   geom_line(data = (weekly_sgtf_counts_perc %>% filter(sgtf_alltests == "Cases with SGTF")), mapping = aes(y = perc*tot_obs), color = "red") + -->
+<!--   scale_y_continuous(labels = comma, -->
+<!--                      sec.axis = sec_axis( ~./tot_obs,  -->
+<!--                                           labels = percent,  -->
+<!--                                           name = "Percent")) + -->
+<!--   theme_bw() + -->
+<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Count", title = "(a)") + -->
+<!--   theme( -->
+<!--     legend.position = "bottom",  -->
+<!--     legend.title = element_blank(), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) +  -->
+<!--   scale_fill_brewer(palette = "Blues") -->
 
-# SGTF plot by region
-weekly_sgtf_counts_by_region_perc <- weekly_sgtf_counts_by_region %>%
-  filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
-  group_by(week, region_nhs) %>%
-  mutate(total = sum(count_redacted, na.rm = T),
-         perc = count_redacted/total)
+<!-- # SGTF plot by region -->
+<!-- weekly_sgtf_counts_by_region_perc <- weekly_sgtf_counts_by_region %>% -->
+<!--   filter(sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>% -->
+<!--   group_by(week, region_nhs) %>% -->
+<!--   mutate(total = sum(count_redacted, na.rm = T), -->
+<!--          perc = count_redacted/total) -->
 
-tot_obs <- max(weekly_sgtf_counts_by_region_perc$total, na.rm = T)
+<!-- tot_obs <- max(weekly_sgtf_counts_by_region_perc$total, na.rm = T) -->
 
-weekly_sgtf_counts_by_region_perc %>%
-  filter(!is.na(region_nhs)) %>%
-  ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) +
-  geom_bar(stat='identity') +
-  geom_line(data = (weekly_sgtf_counts_by_region_perc %>% filter(sgtf_alltests == "Cases with SGTF")), aes(y = perc*tot_obs), color = "red") +
-  facet_wrap(~region_nhs) +
-  scale_y_continuous(labels = comma,
-                     sec.axis = sec_axis(~./tot_obs, 
-                                         labels = percent,
-                                         name = "Percent")) +
-  theme_bw() +
-  scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") +
-  labs(x = "Test date (week commencing)", y = "Count", title = "(b)") +
-  theme(
-    legend.position = "bottom", 
-    legend.title = element_blank(),
-    axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 60, hjust = 1),
-    axis.title = element_text(size = 10),
-    axis.line.x = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank()) + 
-  scale_fill_brewer(palette = "Blues")
+<!-- weekly_sgtf_counts_by_region_perc %>% -->
+<!--   filter(!is.na(region_nhs)) %>% -->
+<!--   ggplot(aes(x = week, y = count_redacted, fill = sgtf_alltests)) + -->
+<!--   geom_bar(stat='identity') + -->
+<!--   geom_line(data = (weekly_sgtf_counts_by_region_perc %>% filter(sgtf_alltests == "Cases with SGTF")), aes(y = perc*tot_obs), color = "red") + -->
+<!--   facet_wrap(~region_nhs) + -->
+<!--   scale_y_continuous(labels = comma, -->
+<!--                      sec.axis = sec_axis(~./tot_obs,  -->
+<!--                                          labels = percent, -->
+<!--                                          name = "Percent")) + -->
+<!--   theme_bw() + -->
+<!--   scale_x_date(date_breaks = "2 month", date_labels =  "%d %b %Y") + -->
+<!--   labs(x = "Test date (week commencing)", y = "Count", title = "(b)") + -->
+<!--   theme( -->
+<!--     legend.position = "bottom",  -->
+<!--     legend.title = element_blank(), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.text.x = element_text(angle = 60, hjust = 1), -->
+<!--     axis.title = element_text(size = 10), -->
+<!--     axis.line.x = element_line(colour = "black"), -->
+<!--     panel.grid.minor.x = element_blank()) +  -->
+<!--   scale_fill_brewer(palette = "Blues") -->
 
-```
+<!-- ``` -->
 
-**Table 1 Number and proportion of COVID-19 cases among those with S gene detection results, by age group and sex.** Counts <8 have been redacted and counts >7 are rounded to the nearest 10; as a result percentages may not add up to 100%.
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%'}
+<!-- **Table 1 Number and proportion of COVID-19 cases among those with S gene detection results, by age group and sex.** Counts <8 have been redacted and counts >7 are rounded to the nearest 10; as a result percentages may not add up to 100%. -->
+<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, out.width = '100%'} -->
 
-sgtf_counts_age_sex <- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_age_sex.rds"))
+<!-- sgtf_counts_age_sex <- read_rds(here::here("output", "data", "weekly_sgtf_counts_by_age_sex.rds")) -->
 
-males <- sgtf_counts_age_sex %>%
-  filter(!is.na(ageband),
-         sex == "M",
-         sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
-  pivot_wider(
-    id_cols = ageband,
-    names_from = sgtf_alltests,
-    values_from = count_redacted)%>%
-  mutate(Total = `Cases with SGTF` + `Detectable S-gene`,
-         `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) %>%
-  select(ageband, Total, `Cases with SGTF`, `Percent SGTF`)
+<!-- males <- sgtf_counts_age_sex %>% -->
+<!--   filter(!is.na(ageband), -->
+<!--          sex == "M", -->
+<!--          sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>% -->
+<!--   pivot_wider( -->
+<!--     id_cols = ageband, -->
+<!--     names_from = sgtf_alltests, -->
+<!--     values_from = count_redacted)%>% -->
+<!--   mutate(Total = `Cases with SGTF` + `Detectable S-gene`, -->
+<!--          `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) %>% -->
+<!--   select(ageband, Total, `Cases with SGTF`, `Percent SGTF`) -->
 
-females <- sgtf_counts_age_sex %>%
-  filter(!is.na(ageband),
-         sex == "F",
-         sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>%
-  pivot_wider(
-    id_cols = ageband,
-    names_from = sgtf_alltests,
-    values_from = count_redacted)%>%
-  mutate(Total = `Cases with SGTF` + `Detectable S-gene`,
-         `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) %>%
-  select(ageband, Total, `Cases with SGTF`, `Percent SGTF`)
+<!-- females <- sgtf_counts_age_sex %>% -->
+<!--   filter(!is.na(ageband), -->
+<!--          sex == "F", -->
+<!--          sgtf_alltests %in% c("Cases with SGTF", "Detectable S-gene")) %>% -->
+<!--   pivot_wider( -->
+<!--     id_cols = ageband, -->
+<!--     names_from = sgtf_alltests, -->
+<!--     values_from = count_redacted)%>% -->
+<!--   mutate(Total = `Cases with SGTF` + `Detectable S-gene`, -->
+<!--          `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) %>% -->
+<!--   select(ageband, Total, `Cases with SGTF`, `Percent SGTF`) -->
 
-all <- full_join(males, females, by = c("ageband")) %>%
-  mutate(Total = `Total.x` + `Total.y`,
-         `Cases with SGTF` = `Cases with SGTF.x` + `Cases with SGTF.y`,
-         `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0))
+<!-- all <- full_join(males, females, by = c("ageband")) %>% -->
+<!--   mutate(Total = `Total.x` + `Total.y`, -->
+<!--          `Cases with SGTF` = `Cases with SGTF.x` + `Cases with SGTF.y`, -->
+<!--          `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) -->
 
-table <- all %>%
-  ungroup() %>%
-  add_row(ageband = "Total",
-          Total.x = sum(all$Total.x, na.rm = T),
-          `Cases with SGTF.x` = sum(all$`Cases with SGTF.x`, na.rm = T),
-          `Percent SGTF.x` = NA,
-          Total.y = sum(all$Total.y, na.rm = T),
-          `Cases with SGTF.y` = sum(all$`Cases with SGTF.y`, na.rm = T),
-          `Percent SGTF.y` = NA,
-          Total = sum(all$Total, na.rm = T),
-          `Cases with SGTF` = sum(all$`Cases with SGTF`),
-          `Percent SGTF` = NA) %>%
-  mutate(`Percent SGTF.x` = round(`Cases with SGTF.x`/Total.x*100, digits = 0),
-         `Percent SGTF.y` = round(`Cases with SGTF.y`/Total.y*100, digits = 0),
-         `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0))
+<!-- table <- all %>% -->
+<!--   ungroup() %>% -->
+<!--   add_row(ageband = "Total", -->
+<!--           Total.x = sum(all$Total.x, na.rm = T), -->
+<!--           `Cases with SGTF.x` = sum(all$`Cases with SGTF.x`, na.rm = T), -->
+<!--           `Percent SGTF.x` = NA, -->
+<!--           Total.y = sum(all$Total.y, na.rm = T), -->
+<!--           `Cases with SGTF.y` = sum(all$`Cases with SGTF.y`, na.rm = T), -->
+<!--           `Percent SGTF.y` = NA, -->
+<!--           Total = sum(all$Total, na.rm = T), -->
+<!--           `Cases with SGTF` = sum(all$`Cases with SGTF`), -->
+<!--           `Percent SGTF` = NA) %>% -->
+<!--   mutate(`Percent SGTF.x` = round(`Cases with SGTF.x`/Total.x*100, digits = 0), -->
+<!--          `Percent SGTF.y` = round(`Cases with SGTF.y`/Total.y*100, digits = 0), -->
+<!--          `Percent SGTF` = round(`Cases with SGTF`/Total*100, digits = 0)) -->
 
-colnames(table) <- c("Age group", "Total", "Cases with SGTF", "Percent SGTF",
-                     "Total", "Cases with SGTF", "Percent SGTF",
-                     "Total", "Cases with SGTF", "Percent SGTF")
+<!-- colnames(table) <- c("Age group", "Total", "Cases with SGTF", "Percent SGTF", -->
+<!--                      "Total", "Cases with SGTF", "Percent SGTF", -->
+<!--                      "Total", "Cases with SGTF", "Percent SGTF") -->
 
-table %>%
-  kable(row.names = FALSE, 
-        align = c("l", rep("c", 9)),
-        booktabs=TRUE) %>%
-  kable_styling(position = "center", full_width = F, bootstrap_options = "striped", font_size = 13)  %>%
-  add_header_above(., c(" ", "Male" = 3, "Female" = 3, "All" = 3))
+<!-- table %>% -->
+<!--   kable(row.names = FALSE,  -->
+<!--         align = c("l", rep("c", 9)), -->
+<!--         booktabs=TRUE) %>% -->
+<!--   kable_styling(position = "center", full_width = F, bootstrap_options = "striped", font_size = 13)  %>% -->
+<!--   add_header_above(., c(" ", "Male" = 3, "Female" = 3, "All" = 3)) -->
 
-```
+<!-- ``` -->

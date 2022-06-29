@@ -436,7 +436,7 @@ clearly this is a PCR only variable.
 <br>
 
 #### Results
-Between 1st March 2020 and 4th June 2022, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available (note, in the All Tests dataset, we are not able to distinguish whether a positive test was done using a PCR or LFT, therefore coverage will be lower than expected due to the dilution of the percentage of LFT tests included);
+Between 1st March 2020 and 4th June 2022, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[4,3])`% had SGTF data available (note, in the All Tests dataset, we are not able to distinguish whether a positive test was done using a PCR or LFT, therefore coverage will be lower than expected due to the dilution of the percentage of LFT tests included);
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 

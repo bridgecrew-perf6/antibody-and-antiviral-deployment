@@ -629,7 +629,11 @@ calculate_weekly_counts_by_region <- function(x) {
     group_by(sgtf_alltests, region_nhs) %>%
     summarise(count = n()) %>%
     ungroup() %>%
-    add_row(sgtf_alltests = "Not avaliable", count = sum(data_extract$tests_conducted_positive, na.rm = T)) %>%
+    rbind(data_extract %>%
+            select(region_nhs, tests_conducted_positive) %>%
+            group_by(region_nhs) %>%
+            summarise(count = sum(tests_conducted_positive, na.rm = T)) %>%
+            mutate(sgtf_alltests = "Not avaliable")) %>%
     mutate(week = as.Date(substr(x, 19,28)),
            count = as.numeric(ifelse(count < threshold, NA, count)),
            count_redacted =  plyr::round_any(count, 10)) %>%

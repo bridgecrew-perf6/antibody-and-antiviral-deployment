@@ -38,7 +38,7 @@ threshold = 8
 ## Read in data (don't rely on defaults)
 input.files = list.files(path = here::here("output", "data"), pattern = "input_sgtf_weekly_")
 
-weekly_sgtf_counts = lapply(input.files, FUN = calculate_weekly_counts) %>% 
+weekly_sgtf_counts = lapply(input.files, FUN = calculate_weekly_sgtf_counts) %>% 
   bind_rows()
 
 weekly_sgtf_counts_by_region = lapply(input.files, FUN = calculate_weekly_counts_by_region) %>% 

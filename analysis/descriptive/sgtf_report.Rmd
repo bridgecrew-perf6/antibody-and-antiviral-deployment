@@ -351,6 +351,8 @@ tbl_merge(tbls, tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Da
 ## Input file names
 input.files = list.files(path = here::here("output", "data"), pattern = "input_sgtf_weekly_")
 
+print(input.files)
+
 # Date range
 start <- as.Date(substr(input.files[1], 19,28))
 end <- as.Date(substr(input.files[length(input.files)], 19,28)) + 6
@@ -409,6 +411,11 @@ clearly this is a PCR only variable.
 Between **`r format(start, format = "%d-%b-%Y")`** and **`r format(end, format = "%d-%b-%Y")`**, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available;
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+ data_extract <- read_csv(
+    here::here("output", "data", input.files[1]))
+    
+table(data_extract$sgtf_alltests)
 
  totals %>%
   kable(row.names = FALSE,

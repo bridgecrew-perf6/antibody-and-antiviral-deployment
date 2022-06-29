@@ -554,7 +554,7 @@ tidy_wald <- function(x, conf.int = TRUE, conf.level = .95, exponentiate = TRUE,
 }
 
 ## Weekly sgtf counts
-calculate_weekly_counts <- function(x) {
+calculate_weekly_sgtf_counts <- function(x) {
   
   # Read in data
   data_extract <- read_csv(
@@ -581,7 +581,7 @@ calculate_weekly_counts <- function(x) {
       sgtf_alltests == "0" ~ "Detectable S-gene",
       sgtf_alltests == "8" ~ "Classified as 8",
       sgtf_alltests == "9" ~ "Unclassifiable",
-      TRUE ~ "Not avaliable")) %>%
+      is.na(sgtf_alltests) ~ "Not avaliable")) %>%
     group_by(sgtf_alltests) %>%
     summarise(count = n()) %>%
     ungroup() %>%
@@ -622,7 +622,7 @@ calculate_weekly_counts_by_region <- function(x) {
       sgtf_alltests == "0" ~ "Detectable S-gene",
       sgtf_alltests == "8" ~ "Classified as 8",
       sgtf_alltests == "9" ~ "Unclassifiable",
-      TRUE ~ "Not avaliable")) %>%
+      is.na(sgtf_alltests) ~ "Not avaliable")) %>%
     group_by(sgtf_alltests, region_nhs) %>%
     summarise(count = n()) %>%
     ungroup() %>%
@@ -666,7 +666,7 @@ calculate_table <- function(x) {
       sgtf_alltests == "0" ~ "Detectable S-gene",
       sgtf_alltests == "8" ~ "Classified as 8",
       sgtf_alltests == "9" ~ "Unclassifiable",
-      TRUE ~ "Not avaliable"),
+      is.na(sgtf_alltests) ~ "Not avaliable"),
       
       ageband = cut(
         age,

@@ -407,23 +407,23 @@ clearly this is a PCR only variable.
 
 <br>
 
-#### Results
-Between **`r format(start, format = "%d-%b-%Y")`** and **`r format(end, format = "%d-%b-%Y")`**, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available;
+<!-- #### Results -->
+<!-- Between **`r format(start, format = "%d-%b-%Y")`** and **`r format(end, format = "%d-%b-%Y")`**, of all (first weekly) positive SARS-CoV-2 tests available in OpenSAFELY from Second Generation Surveillance System (SGSS) data which captures routine laboratory surveillance data on infectious diseases across England, about `r 100 - as.numeric(totals[5,3])`% had SGTF data available; -->
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE} -->
 
- data_extract <- read_csv(
-    here::here("output", "data", "input_sgtf_weekly_2020-03-01.csv.gz"))
-    
-table(data_extract$sgtf_alltests)
+<!--  data_extract <- read_csv( -->
+<!--     here::here("output", "data", "input_sgtf_weekly_2020-03-01.csv.gz")) -->
 
- totals %>%
-  kable(row.names = FALSE,
-        align = c("l", rep("r", 2)),
-        booktabs=TRUE) %>%
-  kable_styling(position = "center", full_width = F, bootstrap_options = "striped", font_size = 10)
+<!-- table(data_extract$sgtf_alltests) -->
 
-```
+<!--  totals %>% -->
+<!--   kable(row.names = FALSE, -->
+<!--         align = c("l", rep("r", 2)), -->
+<!--         booktabs=TRUE) %>% -->
+<!--   kable_styling(position = "center", full_width = F, bootstrap_options = "striped", font_size = 10) -->
+
+<!-- ``` -->
 
 <!-- During this period, the weekly proportion of specimens tested has fluctuated between approximately `r min_weekly_prop`% and `r max_weekly_prop`%, with coverage varying by region (Figure 1). Figure 2 shows how the number of cases with SGTF has fluctuated over time and Figure 3 shows proportion of COVID-19 cases with SGTF among those with S gene detection results. Cases by age and sex are displayed (Table 1). Note, trends in SGTF over space and time are affected by the coverage of laboratories contributing to this surveillance data. -->
 

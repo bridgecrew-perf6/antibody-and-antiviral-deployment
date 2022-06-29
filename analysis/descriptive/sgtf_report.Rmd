@@ -227,9 +227,13 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
+print(tbls1$table_body$stat_0)
+print(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+"))
+
 tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
   str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
+print(tbls1$table_body$stat_0)
 
 tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_alltests) %>%

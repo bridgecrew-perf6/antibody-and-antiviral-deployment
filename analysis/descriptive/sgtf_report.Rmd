@@ -227,11 +227,8 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-print(tbls1$table_body$stat_0)
-print(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+"))
-
 tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
-  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+  str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
 
 tbls2 <- data_sgtf %>%
@@ -244,8 +241,8 @@ tbls2 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls2$table_body$stat_0)
 
 tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 ```
@@ -266,8 +263,8 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
 tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_first_covid_test_date_alltests,) %>%
@@ -279,8 +276,8 @@ tbls2 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls2$table_body$stat_0)
   
 tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
@@ -296,8 +293,8 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
 tbls2 <- data_sgtf %>%
   filter(covid_first_test_positive_date_earliestspecimen == covid_first_test_positive_date_alltests) %>%
@@ -310,8 +307,8 @@ tbls2 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls2$table_body$stat_0)
 
 tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
@@ -333,8 +330,8 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
 tbls2 <- data_sgtf %>%
   select(`S-gene target failure` = sgtf_latest_covid_test_date_alltests,) %>%
@@ -346,8 +343,8 @@ tbls2 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls2$table_body$stat_0)
 
 tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
@@ -363,8 +360,8 @@ tbls1 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls1$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls1$table_body$stat_0)
+tbls1$table_body$stat_0 = ifelse(str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls1$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls1$table_body$stat_0)
 
 tabls2 <- data_sgtf %>%
   filter(covid_latest_test_positive_date_earliestspecimen == covid_latest_test_positive_date_alltests) %>%
@@ -377,8 +374,8 @@ tabls2 <- data_sgtf %>%
            TRUE ~ "Not avaliable")) %>%
   tbl_summary()
 
-tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") > 0 &
-  str_extract(string = tbls2$table_body$stat_0, pattern = "\\d+") < threshold, "<8", tbls2$table_body$stat_0)
+tbls2$table_body$stat_0 = ifelse(str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") > 0 &
+  str_extract(string = tbls2$table_body$stat_0, pattern = "[0-9]+") < threshold, "<8", tbls2$table_body$stat_0)
 
 tbl_merge(list(tbls1, tbls2), tab_spanner = c("**Earliest Specimen Dataset**", "**All Tests Dataset**"))
 
